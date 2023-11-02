@@ -1,0 +1,10 @@
+# Define conda environment for running nnunet.
+name: nnunet
+dependencies:
+  - pip
+  - python==3.10
+  - pip:
+    - torch
+    - torchvision
+    - -e .
+    - git+https://github.com/FabianIsensee/hiddenlayer.git
