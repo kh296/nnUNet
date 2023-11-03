@@ -3,9 +3,9 @@ import torch
 from nnunetv2.training.nnUNetTrainer.nnUNetTrainer import nnUNetTrainer
 
 
-class nnUNetTrainer_SingleIteration(nnUNetTrainer):
+class nnUNetTrainer_2x2(nnUNetTrainer):
     """
-    Trainer initialised to run for a single iteration.
+    Trainer initialised to run for 2 epochs, and 2 iterations per epoch.
 
     This can be useful for testing.
     """
@@ -13,6 +13,6 @@ class nnUNetTrainer_SingleIteration(nnUNetTrainer):
                  device: torch.device = torch.device('cuda')):
         """used for debugging plans etc"""
         super().__init__(plans, configuration, fold, dataset_json, unpack_dataset, device)
-        self.num_iterations_per_epoch = 1
-        self.num_val_iterations_per_epoch = 1
-        self.num_epochs = 1
+        self.num_iterations_per_epoch = 2
+        self.num_val_iterations_per_epoch = 2
+        self.num_epochs = 2

@@ -168,6 +168,11 @@ class nnUNetTrainer(object):
                               timestamp.second))
         self.logger = nnUNetLogger()
 
+        ### kh addition: start
+        # Path to file for writing status updates.
+        self.updates_file = join(self.output_folder, "updates.txt")
+        ### kh addition: end
+
         ### placeholders
         self.dataloader_train = self.dataloader_val = None  # see on_train_start
 
@@ -1232,6 +1237,11 @@ class nnUNetTrainer(object):
 
     def run_training(self):
         self.on_train_start()
+        ### kh addition: start
+        # Initialise monitor file.
+        with open(self.updates_file, "w") as updates_file:
+            pass
+        ### kh addition: end
 
         for epoch in range(self.current_epoch, self.num_epochs):
             self.on_epoch_start()
@@ -1239,6 +1249,16 @@ class nnUNetTrainer(object):
             self.on_train_epoch_start()
             train_outputs = []
             for batch_id in range(self.num_iterations_per_epoch):
+                ### kh addition: start
+                # Update status.
+                with open(self.updates_file, "a") as updates_file:
+                    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    updates_file.write(
+                            f"{timestamp}: epoch {epoch + 1}"
+                            f" of {self.num_epochs};"
+                            f" training iteration {batch_id + 1}"
+                            f" of {self.num_iterations_per_epoch}\n")
+                ### kh addition: end
                 train_outputs.append(self.train_step(next(self.dataloader_train)))
             self.on_train_epoch_end(train_outputs)
 
@@ -1246,6 +1266,16 @@ class nnUNetTrainer(object):
                 self.on_validation_epoch_start()
                 val_outputs = []
                 for batch_id in range(self.num_val_iterations_per_epoch):
+                    ### kh addition: start
+                    # Update status.
+                    with open(self.updates_file, "a") as updates_file:
+                        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        updates_file.write(
+                                f"{timestamp}: epoch {epoch + 1}"
+                                f" of {self.num_epochs};"
+                                f" validation iteration {batch_id + 1}"
+                                f" of {self.num_val_iterations_per_epoch}\n")
+                    ### kh addition: end
                     val_outputs.append(self.validation_step(next(self.dataloader_val)))
                 self.on_validation_epoch_end(val_outputs)
 
