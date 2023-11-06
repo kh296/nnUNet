@@ -4,6 +4,7 @@ dependencies:
   - pip
   - python==3.10
   - pip:
+    - ipython
     - torch
     - torchvision
     - -e .
